@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from pycaret.classification import setup, create_model
+from pycaret.classification import setup, create_model, predict_model
 
 # =========================
 # 1. Load Dataset
@@ -83,3 +83,23 @@ clf = setup(
 model = create_model('lr')
 
 print("Model training completed successfully!")
+
+# =========================
+# 5. TESTING / PREDICTION
+# =========================
+
+# Take one sample patient
+sample_patient = df.drop('target', axis=1).iloc[0:1]
+
+print("\nSample Patient Data:")
+print(sample_patient)
+
+# Predict using PyCaret
+prediction = predict_model(model, data=sample_patient)
+
+print("\nPrediction Output:")
+print(prediction[['prediction_label']])
+
+# Clean result
+result = "Heart Disease" if prediction['prediction_label'].values[0] == 1 else "No Heart Disease"
+print("\nFinal Result:", result)
